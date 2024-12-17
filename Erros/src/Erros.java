@@ -5,7 +5,7 @@ public class Erros {
         //2 tipos de erros
         //erro de compilação
         String text = "ola mundo";
-        System.out.println(text);
+        System.out.println(tex);
 
         //erro de execução
         int x = 10;
