@@ -1,42 +1,47 @@
 package rosonatt;
 
+import java.util.Scanner;
+
 public class Conta {
     private double balance;
     private String nome;
     private String agencia;
     private Log logger;
 
-    // Construtor da Conta
+
     public Conta(String nome, String agencia, double saldoInicial) {
         this.nome = nome;
         this.agencia = agencia;
         this.balance = saldoInicial;
-        this.logger = new Log();  // Inicializa o log
+        this.logger = new Log();  
     }
 
-    // Método para sacar valores
+
     public boolean sacar(double valor) {
         if (balance < valor) {
             logger.imprimir("Erro: Não foi possível sacar " + valor + " reais. Seu saldo atual é de " + balance + " reais.");
             return false;
         }
-        balance -= valor;  // Subtrai o valor do saldo
+        balance -= valor;
         logger.imprimir("Saque de " + valor + " reais realizado com sucesso. Sua conta agora é de " + balance + " reais.");
         return true;
     }
 
-    // Método para depositar valores
+
     public boolean depositar(double valor) {
         if (valor <= 0) {
             logger.imprimir("Erro: Depósito de valor inválido: " + valor + " reais.");
             return false;
         }
-        balance += valor;  // Incrementa o saldo da conta
+        balance += valor;
         logger.imprimir("Depósito de " + valor + " reais realizado com sucesso. Sua conta agora é de " + balance + " reais.");
         return true;
     }
 
-    // Sobrescrita do método toString() para formatar a saída do extrato
+    public void exibirSaldo() {
+        logger.imprimir("Saldo atual: " + balance + " reais.");
+    }
+
     @Override
     public String toString() {
         return "Conta de " + nome + " (" + agencia + ") - Saldo atual: " + balance + " reais.";
@@ -55,26 +60,51 @@ public class Conta {
     }
 
     public static void main(String[] args) {
-        Conta conta = new Conta("Seu Barriga", "001", 0);  // Inicializa com saldo 0
+        Scanner scanner = new Scanner(System.in);
+        Conta conta = new Conta("Seu Barriga", "001", 0);
 
-        // Testando depósitos
-        conta.depositar(100);  // Depósito de 100
-        conta.depositar(50);   // Depósito de 50
-        conta.depositar(100);  // Depósito de 100
+        while (true) {
+            System.out.println("Escolha uma opção:");
+            System.out.println("1 - Depositar");
+            System.out.println("2 - Sacar");
+            System.out.println("3 - Ver saldo");
+            System.out.println("4 - Sair");
 
-        // Testando saques
-        conta.sacar(200);  // Tenta sacar 200
-        conta.sacar(150);  // Tenta sacar 150
+            int opcao = scanner.nextInt();
+            if (opcao == 4) {
+                System.out.println("Encerrando o sistema. Obrigado por usar o banco!");
+                break;
+            }
 
-        // Imprime o extrato da conta no final
+            switch (opcao) {
+                case 1:
+                    System.out.print("Digite o valor para depósito: ");
+                    double deposito = scanner.nextDouble();
+                    conta.depositar(deposito);
+                    break;
+
+                case 2:
+                    System.out.print("Digite o valor para saque: ");
+                    double saque = scanner.nextDouble();
+                    conta.sacar(saque);
+                    break;
+
+                case 3:
+                    conta.exibirSaldo();
+                    break;
+
+                default:
+                    System.out.println("Opção inválida! Tente novamente.");
+            }
+        }
+
         System.out.println(conta);
+        scanner.close();
     }
 }
 
-// Classe Log para imprimir mensagens de log
 class Log {
 
-    // Método para imprimir mensagens no console
     public void imprimir(String mensagem) {
         System.out.println("Log: " + mensagem);
     }
